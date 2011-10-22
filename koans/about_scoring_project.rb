@@ -6,12 +6,12 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 #
 # A greed roll is scored as follows:
 #
-# * A set of three ones is 1000 points
+# + A set of three ones is 1000 points
 #
 # * A set of three numbers (other than ones) is worth 100 times the
 #   number. (e.g. three fives is 500 points).
 #
-# * A one (that is not part of a set of three) is worth 100 points.
+# + A one (that is not part of a set of three) is worth 100 points.
 #
 # * A five (that is not part of a set of three) is worth 50 points.
 #
@@ -30,6 +30,21 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # Your goal is to write the score method.
 
 def score(dice)
+  score = 0
+  values = {1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0}
+  dice.each { |d| values[d] +=1 }
+  
+  values.each_pair do |key, value|
+     if value >= 3
+        score += key * (key == 1 ? 1000 : 100)
+        values[key] -= 3
+     end
+  end
+
+  score += (values[5] % 3) * 50
+  score += (values[1] % 3) * 100
+ 
+  score
   # You need to write this method
 end
 
